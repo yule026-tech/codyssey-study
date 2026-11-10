@@ -28,15 +28,16 @@
     .pool-head { margin:0 0 8px; border:0; padding:0; background:transparent; color:var(--muted); font-size:17px; font-weight:700; text-align:left; }
     #pool { border:1.5px dashed var(--line); border-radius:14px; background:#fff; }
     .card { width:98px; min-height:62px; padding:8px; border:1px solid transparent; border-radius:10px; font-size:14px; font-weight:650; line-height:1.35; overflow-wrap:anywhere; color:var(--ink); cursor:grab; }
-    .movie-entry { width:108px; display:flex; flex-direction:column; gap:4px; align-self:flex-start; }
-    .movie-entry .card { width:100%; }
-    .rating { display:flex; justify-content:center; gap:0; white-space:nowrap; }
-    .rating button { border:0; background:transparent; padding:0 2px; font-size:18px; line-height:1.35; color:#a1a39b; cursor:pointer; }
-    .rating button.filled { color:#bd722b; }
-    .rating button:focus-visible { outline:2px solid #ba613a; }
-    @media(max-width:420px) { .movie-entry { width:100px; } }
     .card[aria-pressed="true"] { outline:3px solid var(--green); outline-offset:2px; }
     .count { display:block; font-size:14px; font-weight:600; }
+    .card-title { display:block; }
+    .review-hint { display:block; margin-top:6px; font-size:11px; font-weight:500; color:var(--green); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .review-editor { margin-top:20px; padding:18px; border:1.5px solid var(--line); background:#fff; border-radius:14px; }
+    .review-editor h2 { margin:0 0 5px; font-size:19px; }
+    .review-editor p { margin:0 0 12px; color:var(--muted); font-size:14px; }
+    .review-editor textarea { width:100%; min-height:100px; resize:vertical; border:1.5px solid var(--line); border-radius:12px; padding:12px; font:inherit; color:var(--ink); }
+    .review-editor button { margin-top:10px; padding:10px 18px; border:0; border-radius:12px; color:white; background:var(--green); font-weight:700; }
+    .review-editor[hidden] { display:none; }
     .note { font-size:13px; color:var(--muted); margin-top:18px; }
     :focus-visible { outline:3px solid #ba613a; outline-offset:3px; }
     @media(max-width:420px) { .label { width:48px; } .card { width:90px; } .drop { padding:10px; gap:8px; } }
@@ -56,10 +57,17 @@
       <button class="pool-head" id="pool-label" type="button" aria-label="미분류로 옮기기">아직 안 정한 영화</button>
       <div class="drop" id="pool" data-tier="pool"></div>
     </section>
+    <section class="review-editor" id="review-editor" aria-label="영화 감상평" hidden>
+      <h2 id="review-heading">영화 감상평</h2>
+      <p>선택한 영화의 감상평을 작성하거나 수정한 뒤 저장해 주세요.</p>
+      <label for="review-text">감상평</label>
+      <textarea id="review-text" maxlength="1000" placeholder="이 영화를 보고 어떤 생각이 들었나요?"></textarea>
+      <button type="button" id="review-save">감상평 저장</button>
+    </section>
     <p class="note">같은 브라우저에서 이 파일을 다시 열면 정리한 목록이 남습니다. 다른 사람에게 파일을 보내도 내 입력 내역까지 전달되지는 않습니다.</p>
   </main>
   <script>
-    const KEY = "codyssey-activity-04-v2";
+    const KEY = "codyssey-activity-04-review-v1";
     const LEVELS = ['S', 'A', 'B', 'C', 'pool'];
     const TITLES = ["기생충","인터스텔라","라라랜드","센과 치히로의 행방불명","어벤져스: 엔드게임","범죄도시","타이타닉","토이 스토리"];
     const COLORS = ["#f2e6dc","#e3eee7","#ede7f6","#fcefd9","#e2ecf4","#f6e3e3"];
@@ -82,36 +90,32 @@
       item.tier = tier; selected = null; save(); render();
       showMessage((item.title || '영화') + '를 옮겼어요.');
     }
-    function movieEntry(item,index) {
-      const entry = document.createElement('div');
-      entry.className = 'movie-entry';
-      entry.append(card(item,index));
-      const rating = document.createElement('div');
-      rating.className = 'rating';
-      rating.setAttribute('role','group');
-      rating.setAttribute('aria-label',item.title + ' 별점');
-      for (let score=1; score<=5; score++) {
-        const star = document.createElement('button');
-        star.type = 'button';
-        star.textContent = score <= (item.rating || 0) ? '★' : '☆';
-        star.className = score <= (item.rating || 0) ? 'filled' : '';
-        star.setAttribute('aria-label',item.title + ' ' + score + '점 주기');
-        star.setAttribute('aria-pressed',String(item.rating === score));
-        star.addEventListener('click',event => {
-          event.stopPropagation();
-          item.rating = score;
-          save(); render();
-          showMessage(item.title + ' 별점을 ' + score + '점으로 저장했어요.');
-        });
-        rating.append(star);
-      }
-      entry.append(rating);
-      return entry;
+    function updateReviewEditor() {
+      const editor = document.querySelector('#review-editor');
+      const item = state.items.find(item => item.id === selected);
+      editor.hidden = !item;
+      if (!item) return;
+      document.querySelector('#review-heading').textContent = item.title + ' · 감상평';
+      document.querySelector('#review-text').value = typeof item.review === 'string' ? item.review : '';
     }
+    document.querySelector('#review-save').addEventListener('click', () => {
+      const item = state.items.find(item => item.id === selected);
+      if (!item) return;
+      item.review = document.querySelector('#review-text').value.trim();
+      save(); render();
+      showMessage(item.title + ' 감상평을 저장했어요.');
+    });
     function card(item,index) {
       const element = document.createElement('button');
       element.type = 'button'; element.className = 'card'; element.draggable = true;
-      element.textContent = item.title || ' '; element.dataset.id = item.id;
+      const name = document.createElement('span'); name.className = 'card-title';
+      name.textContent = item.title || ' '; element.append(name);
+      if (typeof item.review === 'string' && item.review.trim()) {
+        const hint = document.createElement('span'); hint.className = 'review-hint';
+        hint.textContent = '✎ ' + item.review; element.append(hint);
+        element.title = '감상평: ' + item.review;
+      }
+      element.dataset.id = item.id;
       element.style.backgroundColor = COLORS[index % COLORS.length];
       element.setAttribute('aria-label',item.title || '영화 카드');
       element.setAttribute('aria-pressed',String(selected === item.id));
@@ -137,12 +141,12 @@
         label.addEventListener('click',() => { if (selected) move(selected,tier); else showMessage('먼저 영화 카드를 선택해 주세요.'); });
         
         const drop = document.createElement('div'); drop.className = 'drop'; drop.dataset.tier = tier;
-        state.items.forEach((item,index) => { if (item.tier === tier) drop.append(movieEntry(item,index)); });
+        state.items.forEach((item,index) => { if (item.tier === tier) drop.append(card(item,index)); });
         wireDrop(drop,tier); row.append(label,drop); tiers.append(row);
       }
       const pool = document.querySelector('#pool'); pool.replaceChildren();
-      state.items.forEach((item,index) => { if (item.tier === 'pool') pool.append(movieEntry(item,index)); });
-      
+      state.items.forEach((item,index) => { if (item.tier === 'pool') pool.append(card(item,index)); });
+      updateReviewEditor();
     }
     wireDrop(document.querySelector('#pool'),'pool');
     document.querySelector('#pool-label').addEventListener('click',() => { if (selected) move(selected,'pool'); else showMessage('먼저 영화 카드를 선택해 주세요.'); });
