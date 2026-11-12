@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My Career Archive</title>
+<style>
+:root{font-family:system-ui,-apple-system,'Malgun Gothic',sans-serif;color:#283044;background:#fbfcff}*{box-sizing:border-box}body{margin:0}button,input,select,textarea{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #b5a8f7;outline-offset:2px}.wrap{max-width:1040px;margin:auto;padding:28px 20px 80px}.hero{padding:38px 36px;border-radius:26px;background:linear-gradient(115deg,#f3efff,#f1fbf9);margin-bottom:32px}.hero h1{font-size:clamp(27px,4vw,39px);letter-spacing:-1.2px;margin:0 0 10px}.hero p{margin:0;color:#687189}.toolbar{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin-bottom:18px}h2{font-size:23px;margin:0}h3{font-size:19px;margin:0 0 14px}.muted{color:#737b90}.filters{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 24px}.filter{background:#fff;border:1px solid #e6e8f0;border-radius:999px;padding:10px 17px;color:#586174}.filter.active{background:#ded8ff;border-color:#ded8ff;color:#403577;font-weight:700}.primary{background:#7667d8;color:#fff;border:0;border-radius:13px;padding:12px 19px;font-weight:700}.secondary{background:#fff;border:1px solid #dedfea;border-radius:12px;padding:11px 17px;color:#49516a}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card,.panel{background:white;border:1px solid #e9eaf2;border-radius:20px;box-shadow:0 8px 25px rgba(46,48,80,.04)}.card{padding:23px;text-align:left;width:100%;transition:transform .15s,border-color .15s}.card:hover{transform:translateY(-2px);border-color:#bfb4fa}.card h3{margin:12px 0}.card p{margin:8px 0;line-height:1.6}.pill{display:inline-block;border-radius:999px;background:#eeeaff;color:#5e4ea9;padding:5px 11px;font-size:13px;font-weight:700}.pill.outdoor{background:#e6f6f0;color:#27745c}.pill.education{background:#fff0e5;color:#a96c39}.pill.example{background:#f2f3f7;color:#72798a;margin-left:5px}.panel{padding:28px;margin-top:18px}.detail-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}.section{padding:22px 0;border-top:1px solid #edf0f4}.section p{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.8;margin:8px 0}.info{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px;line-height:1.7}.info strong{color:#687189}.star{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.star>div{background:#f8f7ff;border-radius:14px;padding:17px;min-width:0}.star strong{color:#6759bb}.notice{padding:15px 18px;border-radius:13px;background:#f7f4ff;color:#665b8a;margin:0 0 20px;line-height:1.6}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.field{display:flex;flex-direction:column;gap:7px;min-width:0}.field.full{grid-column:1/-1}.field label{font-weight:700;font-size:14px}.field input,.field select,.field textarea{border:1px solid #dfe2eb;border-radius:11px;background:white;padding:12px;width:100%;min-width:0;color:#283044}.field textarea{min-height:92px;resize:vertical}.actions{display:flex;gap:10px;justify-content:flex-end;margin-top:24px}.error{color:#ae3653;font-weight:700;margin-top:15px;white-space:pre-wrap}#empty{padding:30px;text-align:center;border:1px dashed #dcdfea;border-radius:16px}.hidden{display:none!important}@media(max-width:640px){.wrap{padding:16px 14px 50px}.hero{padding:29px 23px;border-radius:20px}.grid,.star,.form-grid{grid-template-columns:1fr}.panel{padding:20px}.toolbar{align-items:flex-start}.primary{max-width:100%}.info{grid-template-columns:1fr;gap:2px}.info strong:not(:first-child){margin-top:9px}.actions{flex-wrap:wrap}.actions button{flex:1}}
+.required{color:#bb3658;font-weight:800}.danger{color:#ba3753;border-color:#f0cbd3}.danger:hover{background:#fff2f5}.card button{font:inherit}.notice strong{font-weight:750}@media(max-width:640px){#detailView .toolbar{align-items:flex-start}#detailView .actions{width:100%;justify-content:flex-start}}
+</style>
+</head>
+<body><main class="wrap"><header class="hero"><h1>My Career Archive</h1><p>나의 경험을 기록하는 공간 ✨</p></header>
+<section id="listView" aria-labelledby="listTitle"><div class="toolbar"><div><h2 id="listTitle">나의 경험 목록</h2><p class="muted" id="count" aria-live="polite"></p></div><button class="primary" id="addBtn" type="button">+ 경험 추가</button></div><nav class="filters" aria-label="경험 유형 필터"><button class="filter active" data-filter="전체" aria-pressed="true">전체</button><button class="filter" data-filter="프로젝트" aria-pressed="false">프로젝트</button><button class="filter" data-filter="대외활동" aria-pressed="false">대외활동</button><button class="filter" data-filter="교육" aria-pressed="false">교육</button></nav><p class="notice">처음에는 등록된 경험이 없습니다. <strong>+ 경험 추가</strong>로 실제 활동을 기록해 보세요. 입력한 내용은 이 브라우저에 자동 저장됩니다. 중요한 기록은 별도로 백업해 두세요.</p><div id="cards" class="grid"></div><p id="empty" class="hidden">등록된 경험이 없습니다. 위의 + 경험 추가 버튼으로 첫 경험을 등록해 보세요.</p></section>
+<section id="detailView" class="hidden" aria-labelledby="detailTitle"><div class="detail-top"><button class="secondary" id="backDetail">← 목록으로</button></div><div class="panel"><div class="toolbar"><h2 id="detailTitle"></h2><div class="actions" style="margin:0"><button type="button" class="secondary" id="editBtn">수정</button><button type="button" class="secondary danger" id="deleteBtn">삭제</button></div></div><p id="detailTag"></p><div class="section"><h3>기본 정보</h3><div class="info" id="detailInfo"></div></div><div class="section"><h3>주요 활동 및 수행 업무</h3><p id="detailActivities"></p></div><div class="section"><h3>성과 및 배운 점</h3><p id="detailOutcome"></p></div><div class="section"><h3>자소서용 STAR 정리</h3><div class="star" id="detailStar"></div></div><div class="section"><h3>면접 예상 질문과 답변 핵심 내용</h3><p><strong>예상 질문</strong></p><p id="detailQuestion"></p><p><strong>답변 핵심 내용</strong></p><p id="detailAnswer"></p></div></div></section>
+<section id="formView" class="hidden" aria-labelledby="formTitle"><div class="detail-top"><button class="secondary" id="backForm">← 목록으로</button></div><div class="panel"><h2 id="formTitle">새 경험 추가</h2><p class="muted"><span class="required">*</span> 표시된 항목은 필수입니다. STAR 및 면접 내용은 나중에 채워도 됩니다. 작성한 경험은 브라우저에 자동 저장됩니다.</p><form id="experienceForm" novalidate><div class="form-grid"><div class="field full"><label for="name">활동명 <span class="required" aria-label="필수">*</span></label><input id="name" name="name" required></div><div class="field"><label for="type">유형 <span class="required" aria-label="필수">*</span></label><select id="type" name="type" required><option value="">유형 선택</option><option>프로젝트</option><option>대외활동</option><option>교육</option></select></div><div class="field"><label for="role">담당 역할 <span class="required" aria-label="필수">*</span></label><input id="role" name="role" required></div><div class="field"><label for="start">시작일 <span class="required" aria-label="필수">*</span></label><input id="start" name="start" type="date" required></div><div class="field"><label for="end">종료일 <span class="required" aria-label="필수">*</span></label><input id="end" name="end" type="date" required></div><div class="field full"><label for="activities">주요 활동 및 수행 업무 <span class="required" aria-label="필수">*</span></label><textarea id="activities" name="activities" required></textarea></div><div class="field full"><label for="outcome">성과 및 배운 점 <span class="required" aria-label="필수">*</span></label><textarea id="outcome" name="outcome" required></textarea></div><div class="field full"><label for="situation">STAR · 상황(S)</label><textarea id="situation" name="situation" required></textarea></div><div class="field full"><label for="task">STAR · 과제(T)</label><textarea id="task" name="task" required></textarea></div><div class="field full"><label for="action">STAR · 행동(A)</label><textarea id="action" name="action" required></textarea></div><div class="field full"><label for="result">STAR · 결과(R)</label><textarea id="result" name="result" required></textarea></div><div class="field full"><label for="question">면접 예상 질문</label><textarea id="question" name="question" required></textarea></div><div class="field full"><label for="answer">답변 핵심 내용</label><textarea id="answer" name="answer" required></textarea></div></div><p id="formError" class="error" role="alert" aria-live="assertive"></p><div class="actions"><button type="button" class="secondary" id="cancelForm">취소</button><button type="submit" class="primary" id="saveBtn">추가하기</button></div></form></div></section></main>
+<script>
+'use strict';
+const STORE_KEY='my-career-archive-user-data-v1';
+const $=id=>document.getElementById(id);
+const form=$('experienceForm');
+const keys=['name','type','role','start','end','activities','outcome','situation','task','action','result','question','answer'];
+const optionalKeys=['situation','task','action','result','question','answer'];
+let experiences=[];
+let filter='전체';
+let editingId=null;
+let detailId=null;
+let changed=false;
+let nextId=1;
+function load(){
+  try{
+    const raw=localStorage.getItem(STORE_KEY);
+    if(raw){const parsed=JSON.parse(raw);if(Array.isArray(parsed)){experiences=parsed.filter(x=>x&&Number.isInteger(x.id)&&typeof x.name==='string'&&typeof x.type==='string');}}
+  }catch(err){alert('저장된 기록을 불러오지 못했습니다. 브라우저의 저장소 설정을 확인해 주세요.');}
+  nextId=Math.max(0,...experiences.map(x=>x.id))+1;
+}
+function save(){
+  try{localStorage.setItem(STORE_KEY,JSON.stringify(experiences));return true}
+  catch(err){alert('브라우저 저장에 실패했습니다. 저장 공간 또는 개인정보 보호 설정을 확인해 주세요.');return false}
+}
+function show(view){['listView','detailView','formView'].forEach(id=>$(id).classList.toggle('hidden',id!==view));window.scrollTo(0,0)}
+function date(s){return s?String(s).replaceAll('-','.'):''}
+function node(tag,text,cls){const el=document.createElement(tag);if(text!==undefined)el.textContent=text;if(cls)el.className=cls;return el}
+function kindClass(type){return 'pill'+(type==='대외활동'?' outdoor':type==='교육'?' education':'')}
+function render(){
+  const sorted=[...experiences].sort((a,b)=>b.end.localeCompare(a.end)||b.start.localeCompare(a.start)||b.id-a.id);
+  const visible=sorted.filter(x=>filter==='전체'||x.type===filter);
+  $('count').textContent=`전체 ${experiences.length}개 · 현재 ${visible.length}개`;
+  const cards=$('cards');cards.replaceChildren();
+  visible.forEach(x=>{
+    const btn=node('button',undefined,'card');btn.type='button';
+    btn.append(node('span',x.type,kindClass(x.type)),node('h3',x.name),node('p',`${date(x.start)} ~ ${date(x.end)}`,'muted'),node('p',`담당 역할: ${x.role}`));
+    btn.addEventListener('click',()=>detail(x.id));cards.append(btn)
+  });
+  $('empty').textContent=experiences.length===0?'등록된 경험이 없습니다. + 경험 추가 버튼으로 첫 경험을 등록해 보세요.':'해당 유형의 경험이 없습니다.';
+  $('empty').classList.toggle('hidden',visible.length>0);
+  document.querySelectorAll('[data-filter]').forEach(btn=>{const on=btn.dataset.filter===filter;btn.classList.toggle('active',on);btn.setAttribute('aria-pressed',String(on))});
+}
+function detail(id){
+  const x=experiences.find(e=>e.id===id);if(!x)return;
+  detailId=id;
+  $('detailTitle').textContent=x.name;
+  $('detailTag').replaceChildren(node('span',x.type,kindClass(x.type)));
+  const info=$('detailInfo');info.replaceChildren();
+  [['활동명',x.name],['유형',x.type],['활동 기간',`${date(x.start)} ~ ${date(x.end)}`],['담당 역할',x.role]].forEach(([k,v])=>info.append(node('strong',k),node('span',v)));
+  $('detailActivities').textContent=x.activities;
+  $('detailOutcome').textContent=x.outcome;
+  const star=$('detailStar');star.replaceChildren();
+  [['상황 (S)',x.situation],['과제 (T)',x.task],['행동 (A)',x.action],['결과 (R)',x.result]].forEach(([k,v])=>{const box=node('div');box.append(node('strong',k),node('p',v||'아직 작성하지 않았습니다.'));star.append(box)});
+  $('detailQuestion').textContent=x.question||'아직 작성하지 않았습니다.';
+  $('detailAnswer').textContent=x.answer||'아직 작성하지 않았습니다.';
+  show('detailView');
+}
+function openForm(id=null){
+  form.reset();$('formError').textContent='';editingId=id;changed=false;
+  const x=experiences.find(x=>x.id===id);
+  if(x)for(const k of keys)form.elements.namedItem(k).value=x[k]||'';
+  $('formTitle').textContent=x?'경험 수정':'새 경험 추가';
+  $('saveBtn').textContent=x?'수정 완료':'추가하기';
+  show('formView');$('name').focus();
+}
+function cancelForm(){
+  if(changed&&!confirm('작성 중인 변경 내용을 취소하고 목록으로 돌아갈까요?'))return;
+  changed=false;show('listView');
+}
+document.querySelectorAll('[data-filter]').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.filter;render()}));
+$('addBtn').addEventListener('click',()=>openForm());
+$('backDetail').addEventListener('click',()=>show('listView'));
+$('backForm').addEventListener('click',cancelForm);
+$('cancelForm').addEventListener('click',cancelForm);
+$('editBtn').addEventListener('click',()=>{if(detailId!==null)openForm(detailId)});
+$('deleteBtn').addEventListener('click',()=>{
+  const x=experiences.find(e=>e.id===detailId);if(!x)return;
+  if(!confirm(`'${x.name}' 경험을 삭제하시겠습니까? 삭제한 내용은 되돌릴 수 없습니다.`))return;
+  const old=[...experiences];experiences=experiences.filter(e=>e.id!==detailId);
+  if(!save()){experiences=old;return}
+  detailId=null;render();show('listView');
+});
+form.addEventListener('input',()=>changed=true);
+form.addEventListener('change',()=>changed=true);
+form.addEventListener('submit',e=>{
+  e.preventDefault();const data={};for(const key of keys)data[key]=form.elements.namedItem(key).value.trim();
+  const required=keys.filter(k=>!optionalKeys.includes(k));
+  const missing=required.find(k=>!data[k]);
+  if(missing){const field=form.elements.namedItem(missing);$('formError').textContent=`필수 항목을 입력해 주세요: ${field.labels?.[0]?.textContent.trim()||missing}`;field.focus();return}
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(data.start)||!/^\d{4}-\d{2}-\d{2}$/.test(data.end)||!Number.isFinite(Date.parse(data.start))||!Number.isFinite(Date.parse(data.end))){$('formError').textContent='시작일과 종료일을 올바르게 입력해 주세요.';return}
+  if(data.end<data.start){$('formError').textContent='종료일은 시작일보다 빠를 수 없습니다.';$('end').focus();return}
+  const old=[...experiences];
+  if(editingId!==null){experiences=experiences.map(x=>x.id===editingId?{...data,id:editingId}:x)}
+  else{experiences.push({...data,id:nextId++})}
+  if(!save()){experiences=old;return}
+  filter='전체';changed=false;render();show('listView');
+});
+window.addEventListener('beforeunload',e=>{if(changed){e.preventDefault();e.returnValue=''}});
+load();render();
+</script></body></html>
