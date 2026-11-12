@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My Career Archive</title>
+<style>
+:root{font-family:system-ui,-apple-system,'Malgun Gothic',sans-serif;color:#283044;background:#fbfcff}*{box-sizing:border-box}body{margin:0}button,input,select,textarea{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #b5a8f7;outline-offset:2px}.wrap{max-width:1040px;margin:auto;padding:28px 20px 80px}.hero{padding:38px 36px;border-radius:26px;background:linear-gradient(115deg,#f3efff,#f1fbf9);margin-bottom:32px}.hero h1{font-size:clamp(27px,4vw,39px);letter-spacing:-1.2px;margin:0 0 10px}.hero p{margin:0;color:#687189}.toolbar{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin-bottom:18px}h2{font-size:23px;margin:0}h3{font-size:19px;margin:0 0 14px}.muted{color:#737b90}.filters{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 24px}.filter{background:#fff;border:1px solid #e6e8f0;border-radius:999px;padding:10px 17px;color:#586174}.filter.active{background:#ded8ff;border-color:#ded8ff;color:#403577;font-weight:700}.primary{background:#7667d8;color:#fff;border:0;border-radius:13px;padding:12px 19px;font-weight:700}.secondary{background:#fff;border:1px solid #dedfea;border-radius:12px;padding:11px 17px;color:#49516a}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card,.panel{background:white;border:1px solid #e9eaf2;border-radius:20px;box-shadow:0 8px 25px rgba(46,48,80,.04)}.card{padding:23px;text-align:left;width:100%;transition:transform .15s,border-color .15s}.card:hover{transform:translateY(-2px);border-color:#bfb4fa}.card h3{margin:12px 0}.card p{margin:8px 0;line-height:1.6}.pill{display:inline-block;border-radius:999px;background:#eeeaff;color:#5e4ea9;padding:5px 11px;font-size:13px;font-weight:700}.pill.outdoor{background:#e6f6f0;color:#27745c}.pill.education{background:#fff0e5;color:#a96c39}.pill.example{background:#f2f3f7;color:#72798a;margin-left:5px}.panel{padding:28px;margin-top:18px}.detail-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}.section{padding:22px 0;border-top:1px solid #edf0f4}.section p{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.8;margin:8px 0}.info{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px;line-height:1.7}.info strong{color:#687189}.star{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.star>div{background:#f8f7ff;border-radius:14px;padding:17px;min-width:0}.star strong{color:#6759bb}.notice{padding:15px 18px;border-radius:13px;background:#f7f4ff;color:#665b8a;margin:0 0 20px;line-height:1.6}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.field{display:flex;flex-direction:column;gap:7px;min-width:0}.field.full{grid-column:1/-1}.field label{font-weight:700;font-size:14px}.field input,.field select,.field textarea{border:1px solid #dfe2eb;border-radius:11px;background:white;padding:12px;width:100%;min-width:0;color:#283044}.field textarea{min-height:92px;resize:vertical}.actions{display:flex;gap:10px;justify-content:flex-end;margin-top:24px}.error{color:#ae3653;font-weight:700;margin-top:15px;white-space:pre-wrap}#empty{padding:30px;text-align:center;border:1px dashed #dcdfea;border-radius:16px}.hidden{display:none!important}@media(max-width:640px){.wrap{padding:16px 14px 50px}.hero{padding:29px 23px;border-radius:20px}.grid,.star,.form-grid{grid-template-columns:1fr}.panel{padding:20px}.toolbar{align-items:flex-start}.primary{max-width:100%}.info{grid-template-columns:1fr;gap:2px}.info strong:not(:first-child){margin-top:9px}.actions{flex-wrap:wrap}.actions button{flex:1}}
+.required{color:#bb3658;font-weight:800}.danger{color:#ba3753;border-color:#f0cbd3}.danger:hover{background:#fff2f5}.card button{font:inherit}.notice strong{font-weight:750}@media(max-width:640px){#detailView .toolbar{align-items:flex-start}#detailView .actions{width:100%;justify-content:flex-start}}
+
+/* 2-3 v2: 탐색, 진행 상태, 긴 글 접기 */
+.search-row{display:flex;gap:10px;align-items:center;margin:0 0 16px;flex-wrap:wrap}
+.search-row input{flex:1;min-width:180px;border:1px solid #dfe2eb;border-radius:12px;padding:12px 14px;background:white;color:#283044}
+.search-row input:focus-visible{outline:3px solid #b5a8f7;outline-offset:2px}
+.status-badge{display:inline-block;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;background:#e8f7f1;color:#256c56}
+.status-badge.complete{background:#eef0f5;color:#626b83}
+.card .status-badge{margin-left:6px}
+.inline-check{display:flex;align-items:center;gap:9px;font-size:14px;color:#49516a;margin-top:8px}
+.inline-check input{width:18px;height:18px}
+.fold{border:1px solid #eeeef5;border-radius:13px;margin:12px 0;background:#fff}
+.fold summary{cursor:pointer;padding:13px 16px;font-weight:700;color:#6256a3;list-style-position:inside}
+.fold[open] summary{border-bottom:1px solid #eeeef5}
+.fold .fold-body{padding:12px 16px}
+.fold .fold-body p{margin:5px 0}
+@media(max-width:640px){.search-row input{min-width:0;width:100%}}
+
+/* v3: 백업 · 복원 */
+.backup-tools{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:0 0 18px;padding:15px 18px;border:1px solid #e6e8f0;border-radius:16px;background:#fff}
+.backup-tools .backup-text{flex:1 1 230px;min-width:0}
+.backup-tools .backup-text strong{display:block;margin-bottom:3px}
+.backup-tools .backup-text small{display:block;line-height:1.5;color:#737b90}
+.backup-tools button{min-height:42px}
+.backup-status{margin:0 0 15px;font-size:14px;line-height:1.6;color:#4b5570}
+.backup-status.error{color:#ae3653}
+/* v4: 면접 질문·답변 묶음과 연습 화면 */
+.top-nav{display:flex;gap:9px;flex-wrap:wrap;margin:0 0 20px}
+.top-nav button{min-height:44px}
+.qa-editor{grid-column:1/-1;border-top:1px solid #e9eaf2;margin-top:8px;padding-top:18px}
+.qa-editor-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.qa-row{background:#f8f7ff;border:1px solid #ece8fb;border-radius:14px;padding:16px;margin:12px 0}
+.qa-row-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:10px}
+.qa-row textarea{min-height:76px}
+.qa-row .field+ .field{margin-top:12px}
+.qa-item{padding:13px 16px;margin:10px 0;border-radius:13px;background:#f8f7ff}
+.qa-item p{margin:6px 0}
+.practice-card{background:#f8f7ff;border:1px solid #ebe5fb;border-radius:18px;padding:24px;min-height:220px}
+.practice-card .category{color:#6759bb;font-weight:700;font-size:14px}
+.practice-card h3{font-size:21px;line-height:1.5;margin:16px 0}
+.practice-answer{background:white;border-radius:12px;padding:16px;margin-top:14px;white-space:pre-wrap;line-height:1.7}
+.practice-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.practice-actions button{min-height:44px}
+@media(max-width:640px){.qa-editor-head{align-items:flex-start}.practice-actions button{flex:1}}
+
+/* v5: 활동 기간 가로 타임라인 */
+.timeline-panel{background:#fff;border:1px solid #e9eaf2;border-radius:20px;padding:21px 22px;margin:0 0 22px;box-shadow:0 8px 25px rgba(46,48,80,.04)}
+.timeline-title-row{display:flex;justify-content:space-between;align-items:start;gap:12px;flex-wrap:wrap;margin-bottom:13px}
+.timeline-title-row h3{margin:0 0 3px;font-size:18px}
+.timeline-title-row p{margin:0;color:#737b90;font-size:13px}
+.timeline-legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:#687189}
+.timeline-key::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;background:#8675df}
+.timeline-key.outdoor::before{background:#42ad90}.timeline-key.education::before{background:#e5a369}
+.timeline-scroller{overflow-x:auto;padding-bottom:6px;scrollbar-gutter:stable}
+.timeline-chart{min-width:610px}
+.timeline-scale,.timeline-entry{display:grid;grid-template-columns:175px minmax(0,1fr);gap:12px;align-items:center}
+.timeline-scale{padding-bottom:9px;border-bottom:1px solid #edf0f4}
+.timeline-axis{position:relative;height:23px}
+.timeline-tick{position:absolute;top:0;transform:translateX(-50%);font-size:11px;color:#737b90;white-space:nowrap}
+.timeline-tick:first-child{transform:none}.timeline-tick:last-child{transform:translateX(-100%)}
+.timeline-entry{padding:7px 0;border-bottom:1px solid #f2f1f7}
+.timeline-entry:last-child{border-bottom:0}
+.timeline-name{background:transparent;border:0;text-align:left;padding:4px 2px;font-weight:600;font-size:13px;color:#42465c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.timeline-name:hover{text-decoration:underline;color:#6759bb}
+.timeline-track{position:relative;height:22px;border-radius:6px;background:repeating-linear-gradient(to right,#faf9fe 0,#faf9fe calc(25% - 1px),#ebe8f4 calc(25% - 1px),#ebe8f4 25%)}
+.timeline-bar{position:absolute;top:4px;height:14px;min-width:5px;border-radius:7px;background:#8675df;border:0;cursor:pointer;transition:filter .15s}
+.timeline-bar:hover{filter:brightness(.90)}.timeline-bar.outdoor{background:#42ad90}.timeline-bar.education{background:#e5a369}
+.timeline-bar.ongoing{border-radius:7px 0 0 7px;background-image:repeating-linear-gradient(120deg,transparent,transparent 7px,rgba(255,255,255,.23) 7px,rgba(255,255,255,.23) 11px)}
+.timeline-today{position:absolute;top:-3px;bottom:-3px;width:2px;background:#e66d80;pointer-events:none;z-index:1;opacity:.85}
+.timeline-today::after{content:"";position:absolute;top:-2px;left:-3px;width:8px;height:8px;border-radius:50%;background:#e66d80}
+.timeline-empty{padding:20px 0;text-align:center;color:#737b90;font-size:14px}
+@media(max-width:640px){.timeline-panel{padding:17px 14px}.timeline-title-row h3{font-size:17px}}
+</style>
+</head>
+<body><main class="wrap"><header class="hero"><h1>My Career Archive</h1><p>나의 경험을 기록하는 공간 ✨</p></header>
+<nav class="top-nav" aria-label="화면 이동"><button id="navList" type="button" class="secondary">📂 경험 목록</button><button id="navPractice" type="button" class="secondary">🎤 면접 연습</button></nav><section id="listView" aria-labelledby="listTitle"><div class="toolbar"><div><h2 id="listTitle">나의 경험 목록</h2><p class="muted" id="count" aria-live="polite"></p></div><button class="primary" id="addBtn" type="button">+ 경험 추가</button></div><section class="timeline-panel" aria-labelledby="timelineTitle"><div class="timeline-title-row"><div><h3 id="timelineTitle">📅 활동 타임라인</h3><p>활동 기간을 막대로 비교해요. 막대나 활동명을 누르면 상세 내용이 열려요.</p></div><div class="timeline-legend"><span class="timeline-key">프로젝트</span><span class="timeline-key outdoor">대외활동</span><span class="timeline-key education">교육</span></div></div><div id="timeline" class="timeline-scroller" aria-live="polite"></div></section><nav class="filters" aria-label="경험 유형 필터"><button class="filter active" data-filter="전체" aria-pressed="true">전체</button><button class="filter" data-filter="프로젝트" aria-pressed="false">프로젝트</button><button class="filter" data-filter="대외활동" aria-pressed="false">대외활동</button><button class="filter" data-filter="교육" aria-pressed="false">교육</button></nav><div class="search-row"><input id="searchInput" type="search" aria-label="활동명 검색" placeholder="활동명으로 검색 (예: BlueRoom)"><button id="clearSearch" class="secondary" type="button">검색 초기화</button></div><div class="backup-tools" role="group" aria-label="경험 데이터 백업 및 복원"><div class="backup-text"><strong>내 경험 백업 · 복원</strong><small>다른 브라우저로 옮길 때 JSON 파일을 내려받아 가져올 수 있어요. 자동 동기화는 되지 않습니다.</small></div><button id="exportBtn" type="button" class="secondary">↓ JSON 백업</button><button id="importBtn" type="button" class="secondary">↑ JSON 가져오기</button><input id="importFile" type="file" accept=".json,application/json" aria-label="커리어 아카이브 JSON 백업 파일 선택" hidden></div><p id="backupStatus" class="backup-status" role="status" aria-live="polite" hidden></p><p class="notice">처음에는 등록된 경험이 없습니다. <strong>+ 경험 추가</strong>로 실제 활동을 기록해 보세요. 입력한 내용은 이 브라우저에 자동 저장됩니다. 중요한 기록은 별도로 백업해 두세요.</p><div id="cards" class="grid"></div><p id="empty" class="hidden">등록된 경험이 없습니다. 위의 + 경험 추가 버튼으로 첫 경험을 등록해 보세요.</p></section>
+<section id="detailView" class="hidden" aria-labelledby="detailTitle"><div class="detail-top"><button class="secondary" id="backDetail">← 목록으로</button></div><div class="panel"><div class="toolbar"><h2 id="detailTitle"></h2><div class="actions" style="margin:0"><button type="button" class="secondary" id="editBtn">수정</button><button type="button" class="secondary danger" id="deleteBtn">삭제</button></div></div><p id="detailTag"></p><div class="section"><h3>기본 정보</h3><div class="info" id="detailInfo"></div></div><div class="section"><h3>주요 활동 및 수행 업무</h3><details class="fold"><summary>활동 내용 보기 / 접기</summary><div class="fold-body"><p id="detailActivities"></p></div></details></div><div class="section"><h3>성과 및 배운 점</h3><details class="fold"><summary>성과와 배운 점 보기 / 접기</summary><div class="fold-body"><p id="detailOutcome"></p></div></details></div><div class="section"><h3>자소서용 STAR 정리</h3><details class="fold"><summary>STAR 내용 보기 / 접기</summary><div class="fold-body"><div class="star" id="detailStar"></div></div></details></div><div class="section"><h3>면접 질문 · 답변 세트</h3><details class="fold"><summary>등록된 면접 질문 보기 / 접기</summary><div class="fold-body" id="detailQaList"></div></details></div></div></section>
+<section id="formView" class="hidden" aria-labelledby="formTitle"><div class="detail-top"><button class="secondary" id="backForm">← 목록으로</button></div><div class="panel"><h2 id="formTitle">새 경험 추가</h2><p class="muted"><span class="required">*</span> 표시된 항목은 필수입니다. STAR 및 면접 내용은 나중에 채워도 됩니다. 작성한 경험은 브라우저에 자동 저장됩니다.</p><form id="experienceForm" novalidate><div class="form-grid"><div class="field full"><label for="name">활동명 <span class="required" aria-label="필수">*</span></label><input id="name" name="name" required></div><div class="field"><label for="type">유형 <span class="required" aria-label="필수">*</span></label><select id="type" name="type" required><option value="">유형 선택</option><option>프로젝트</option><option>대외활동</option><option>교육</option></select></div><div class="field"><label for="role">담당 역할 <span class="required" aria-label="필수">*</span></label><input id="role" name="role" required></div><div class="field"><label for="start">시작일 <span class="required" aria-label="필수">*</span></label><input id="start" name="start" type="date" required></div><div class="field"><label for="end">종료일 <span class="required" id="endRequired" aria-label="필수">*</span></label><input id="end" name="end" type="date" required><label class="inline-check" for="ongoing"><input id="ongoing" name="ongoing" type="checkbox">현재 진행 중인 활동 (종료일 미정)</label></div><div class="field full"><label for="activities">주요 활동 및 수행 업무 <span class="required" aria-label="필수">*</span></label><textarea id="activities" name="activities" required></textarea></div><div class="field full"><label for="outcome">성과 및 배운 점 <span class="required" aria-label="필수">*</span></label><textarea id="outcome" name="outcome" required></textarea></div><div class="field full"><label for="situation">STAR · 상황(S)</label><textarea id="situation" name="situation" required></textarea></div><div class="field full"><label for="task">STAR · 과제(T)</label><textarea id="task" name="task" required></textarea></div><div class="field full"><label for="action">STAR · 행동(A)</label><textarea id="action" name="action" required></textarea></div><div class="field full"><label for="result">STAR · 결과(R)</label><textarea id="result" name="result" required></textarea></div><div class="qa-editor"><div class="qa-editor-head"><div><h3>면접 질문 · 답변 관리 (선택)</h3><p class="muted">질문과 핵심 답변을 한 묶음으로 등록해요. 여러 개를 추가할 수 있습니다.</p></div><button type="button" class="secondary" id="addQaBtn">+ 질문 세트 추가</button></div><div id="qaEditorRows"></div></div></div><p id="formError" class="error" role="alert" aria-live="assertive"></p><div class="actions"><button type="button" class="secondary" id="cancelForm">취소</button><button type="submit" class="primary" id="saveBtn">추가하기</button></div></form></div></section><section id="practiceView" class="hidden" aria-labelledby="practiceTitle"><div class="panel"><h2 id="practiceTitle">🎤 랜덤 면접 연습</h2><p class="muted">등록한 경험의 질문이 무작위로 나와요. 먼저 말로 답한 뒤 핵심 답변을 확인해 보세요.</p><div class="practice-card" id="practiceCard"><p class="category" id="practiceActivity"></p><h3 id="practiceQuestion"></h3><div class="practice-answer hidden" id="practiceAnswer"></div><p id="practiceEmpty" class="muted hidden">등록된 면접 질문이 없어요. 경험을 수정해 질문·답변 세트를 추가해 보세요.</p></div><div class="practice-actions"><button id="revealAnswer" type="button" class="secondary">핵심 답변 보기</button><button id="nextQuestion" type="button" class="primary">🔀 다음 질문</button></div><p class="muted" id="practiceProgress" aria-live="polite"></p></div></section></main>
+<script>
+'use strict';
+const STORE_KEY='my-career-archive-user-data-v1';
+const $=id=>document.getElementById(id);
+const form=$('experienceForm');
+const keys=['name','type','role','start','end','activities','outcome','situation','task','action','result','question','answer'];
+const formKeys=keys.filter(k=>k!=='question'&&k!=='answer');
+function getQaPairs(x){if(Array.isArray(x.qaPairs))return x.qaPairs.filter(p=>p&&typeof p.question==='string'&&typeof p.answer==='string'&&(p.question.trim()||p.answer.trim())).map(p=>({question:p.question,answer:p.answer}));return (x.question||x.answer)?[{question:x.question||'',answer:x.answer||''}]:[];}
+let qaDraft=[];let practiceDeck=[];let practiceIndex=-1;let lastPracticeId=null;
+let searchTerm='';
+function isOngoing(x){return x.ongoing===true;}
+function statusOf(x){return isOngoing(x)?'진행 중':'완료';}
+function updateEndControl(){const ongoing=$('ongoing').checked; $('end').disabled=ongoing;$('end').required=!ongoing;$('endRequired').hidden=ongoing; if(ongoing)$('end').value='';}
+const optionalKeys=['situation','task','action','result','question','answer'];
+let experiences=[];
+let filter='전체';
+let editingId=null;
+let detailId=null;
+let changed=false;
+let nextId=1;
+function load(){
+  try{
+    const raw=localStorage.getItem(STORE_KEY);
+    if(raw){const parsed=JSON.parse(raw);if(Array.isArray(parsed)){experiences=parsed.filter(x=>x&&Number.isInteger(x.id)&&typeof x.name==='string'&&typeof x.type==='string');}}
+  }catch(err){alert('저장된 기록을 불러오지 못했습니다. 브라우저의 저장소 설정을 확인해 주세요.');}
+  nextId=Math.max(0,...experiences.map(x=>x.id))+1;
+}
+function save(){
+  try{localStorage.setItem(STORE_KEY,JSON.stringify(experiences));return true}
+  catch(err){alert('브라우저 저장에 실패했습니다. 저장 공간 또는 개인정보 보호 설정을 확인해 주세요.');return false}
+}
+function show(view){['listView','detailView','formView','practiceView'].forEach(id=>$(id).classList.toggle('hidden',id!==view));window.scrollTo(0,0)}
+function date(s){return s?String(s).replaceAll('-','.'):''}
+function node(tag,text,cls){const el=document.createElement(tag);if(text!==undefined)el.textContent=text;if(cls)el.className=cls;return el}
+function kindClass(type){return 'pill'+(type==='대외활동'?' outdoor':type==='교육'?' education':'')}
+function renderTimeline(items){
+  const host=$('timeline');host.replaceChildren();
+  const dated=items.filter(x=>/^\d{4}-\d{2}-\d{2}$/.test(x.start)&& (isOngoing(x)||/^\d{4}-\d{2}-\d{2}$/.test(x.end)));
+  if(!dated.length){host.append(node('p',items.length?'날짜 정보가 있는 활동이 없습니다.':'활동을 추가하면 여기에 기간이 표시돼요.','timeline-empty'));return;}
+  const today=new Date();today.setHours(0,0,0,0);
+  const todayMs=today.getTime();
+  const startMs=dated.map(x=>new Date(x.start+'T00:00:00').getTime());
+  const endMs=dated.map(x=>isOngoing(x)?todayMs:new Date(x.end+'T00:00:00').getTime());
+  const lower=Math.min(...startMs),upper=Math.max(...endMs,lower+86400000);
+  const firstYear=new Date(lower).getFullYear();
+  const lastYear=new Date(upper).getFullYear();
+  const min=new Date(firstYear,0,1).getTime();
+  const max=new Date(lastYear+1,0,1).getTime();
+  const total=Math.max(1,max-min);
+  const pos=ms=>Math.max(0,Math.min(100,100*(ms-min)/total));
+  const chart=node('div',undefined,'timeline-chart');
+  const scale=node('div',undefined,'timeline-scale');
+  scale.append(node('span','활동명','muted'));
+  const axis=node('div',undefined,'timeline-axis');
+  const yearSpan=lastYear-firstYear+1;
+  for(let y=firstYear;y<=lastYear+1;y++){
+    if(yearSpan>12&&(y-firstYear)%Math.ceil(yearSpan/8)!==0&&y!==lastYear+1)continue;
+    const tick=node('span',String(y),'timeline-tick');tick.style.left=pos(new Date(y,0,1).getTime())+'%';axis.append(tick);
+  }
+  scale.append(axis);chart.append(scale);
+  dated.forEach(x=>{
+    const row=node('div',undefined,'timeline-entry');
+    const name=node('button',x.name,'timeline-name');name.type='button';name.title=x.name;
+    name.addEventListener('click',()=>detail(x.id));row.append(name);
+    const track=node('div',undefined,'timeline-track');
+    const start=new Date(x.start+'T00:00:00').getTime();
+    const end=isOngoing(x)?todayMs:new Date(x.end+'T00:00:00').getTime();
+    const left=pos(Math.min(start,end));const right=pos(Math.max(start,end));
+    const bar=node('button',undefined,'timeline-bar'+(x.type==='대외활동'?' outdoor':x.type==='교육'?' education':'')+(isOngoing(x)?' ongoing':''));
+    bar.type='button';bar.style.left=left+'%';bar.style.width=Math.max(.7,right-left)+'%';
+    bar.setAttribute('aria-label',x.name+' '+date(x.start)+'부터 '+(isOngoing(x)?'현재 진행 중':date(x.end)+'까지')+' 상세 보기');
+    bar.title=x.name+' | '+date(x.start)+' ~ '+(isOngoing(x)?'진행 중':date(x.end));
+    bar.addEventListener('click',()=>detail(x.id));track.append(bar);
+    if(todayMs>=min&&todayMs<=max){const now=node('span',undefined,'timeline-today');now.style.left=pos(todayMs)+'%';now.title='오늘';track.append(now);}
+    row.append(track);chart.append(row);
+  });
+  host.append(chart);
+}
+function render(){
+  const sorted=[...experiences].sort((a,b)=>b.end.localeCompare(a.end)||b.start.localeCompare(a.start)||b.id-a.id);
+  const visible=sorted.filter(x=>(filter==='전체'||x.type===filter)&&x.name.toLocaleLowerCase().includes(searchTerm));
+  $('count').textContent=`전체 ${experiences.length}개 · 현재 ${visible.length}개`;
+  renderTimeline(visible);
+  const cards=$('cards');cards.replaceChildren();
+  visible.forEach(x=>{
+    const btn=node('button',undefined,'card');btn.type='button';
+    btn.append(node('span',x.type,kindClass(x.type)),node('span',statusOf(x),'status-badge'+(isOngoing(x)?'':' complete')),node('h3',x.name),node('p',`${date(x.start)} ~ ${isOngoing(x)?'진행 중':date(x.end)}`,'muted'),node('p',`담당 역할: ${x.role}`));
+    btn.addEventListener('click',()=>detail(x.id));cards.append(btn)
+  });
+  $('empty').textContent=experiences.length===0?'등록된 경험이 없습니다. + 경험 추가 버튼으로 첫 경험을 등록해 보세요.':searchTerm?'검색 조건에 맞는 경험이 없습니다.':'해당 유형의 경험이 없습니다.';
+  $('empty').classList.toggle('hidden',visible.length>0);
+  document.querySelectorAll('[data-filter]').forEach(btn=>{const on=btn.dataset.filter===filter;btn.classList.toggle('active',on);btn.setAttribute('aria-pressed',String(on))});
+}
+function detail(id){
+  const x=experiences.find(e=>e.id===id);if(!x)return;
+  detailId=id;
+  $('detailTitle').textContent=x.name;
+  $('detailTag').replaceChildren(node('span',x.type,kindClass(x.type)));
+  const info=$('detailInfo');info.replaceChildren();
+  [['활동명',x.name],['유형',x.type],['진행 상태',statusOf(x)],['활동 기간',`${date(x.start)} ~ ${isOngoing(x)?'진행 중':date(x.end)}`],['담당 역할',x.role]].forEach(([k,v])=>info.append(node('strong',k),node('span',v)));
+  $('detailActivities').textContent=x.activities;
+  $('detailOutcome').textContent=x.outcome;
+  const star=$('detailStar');star.replaceChildren();
+  [['상황 (S)',x.situation],['과제 (T)',x.task],['행동 (A)',x.action],['결과 (R)',x.result]].forEach(([k,v])=>{const box=node('div');box.append(node('strong',k),node('p',v||'아직 작성하지 않았습니다.'));star.append(box)});
+  const qaList=$('detailQaList');qaList.replaceChildren();
+  const pairs=getQaPairs(x);
+  if(!pairs.length)qaList.append(node('p','아직 작성한 질문이 없습니다.','muted'));
+  pairs.forEach((p,i)=>{const wrap=node('div',undefined,'qa-item');wrap.append(node('strong',`${i+1}. ${p.question||'(질문 미작성)'}`),node('p',p.answer||'핵심 답변 미작성'));qaList.append(wrap);});
+  show('detailView');
+}
+function syncQaEditor(){
+  const rows=[...$('qaEditorRows').querySelectorAll('.qa-row')];
+  qaDraft=rows.map(row=>({question:row.querySelector('[data-qa-question]').value,answer:row.querySelector('[data-qa-answer]').value}));
+}
+function renderQaEditor(){
+  const root=$('qaEditorRows');root.replaceChildren();
+  qaDraft.forEach((pair,i)=>{
+    const wrap=node('div',undefined,'qa-row');
+    const heading=node('div',undefined,'qa-row-title');heading.append(node('strong',`질문 세트 ${i+1}`));
+    const remove=node('button','삭제','secondary danger');remove.type='button';remove.addEventListener('click',()=>{syncQaEditor();qaDraft.splice(i,1);renderQaEditor();changed=true;});heading.append(remove);
+    const qWrap=node('div',undefined,'field'),qLabel=node('label','예상 질문'),q=node('textarea');q.dataset.qaQuestion='';q.placeholder='면접 예상 질문을 적어 주세요';q.value=pair.question;q.setAttribute('aria-label',`면접 질문 ${i+1}`);qWrap.append(qLabel,q);
+    const aWrap=node('div',undefined,'field'),aLabel=node('label','답변 핵심 내용'),a=node('textarea');a.dataset.qaAnswer='';a.placeholder='답변할 때 기억할 핵심 내용을 적어 주세요';a.value=pair.answer;a.setAttribute('aria-label',`핵심 답변 ${i+1}`);aWrap.append(aLabel,a);
+    wrap.append(heading,qWrap,aWrap);root.append(wrap);
+  });
+}
+function allPracticeQuestions(){
+  const found=[];
+  for(const x of experiences)for(const pair of getQaPairs(x))if(pair.question.trim())found.push({id:x.id+'|'+pair.question,activity:x.name,question:pair.question,answer:pair.answer});
+  return found;
+}
+function shufflePractice(){
+  const arr=allPracticeQuestions();
+  for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}
+  if(arr.length>1&&lastPracticeId===arr[0].id){const alternate=arr.findIndex(q=>q.id!==lastPracticeId);if(alternate>0)[arr[0],arr[alternate]]=[arr[alternate],arr[0]];}
+  practiceDeck=arr;practiceIndex=-1;
+}
+function renderPractice(){
+  const current=practiceDeck[practiceIndex];
+  $('practiceEmpty').classList.toggle('hidden',!!current);
+  $('practiceActivity').textContent=current?current.activity:'';
+  $('practiceQuestion').textContent=current?current.question:'';
+  $('practiceAnswer').textContent=current?(current.answer.trim()||'등록된 핵심 답변이 없습니다.'):'';
+  $('practiceAnswer').classList.add('hidden');
+  $('revealAnswer').textContent='핵심 답변 보기';
+  $('revealAnswer').disabled=!current;$('nextQuestion').disabled=!practiceDeck.length;
+  $('practiceProgress').textContent=current?`이번 회차 ${practiceIndex+1} / ${practiceDeck.length}문항`:'등록된 면접 질문이 없습니다.';
+}
+function nextPractice(){
+  if(!practiceDeck.length||practiceIndex>=practiceDeck.length-1)shufflePractice();
+  if(practiceDeck.length){practiceIndex++;lastPracticeId=practiceDeck[practiceIndex].id;}
+  renderPractice();
+}
+function openPractice(){shufflePractice();nextPractice();show('practiceView');}
+$('navPractice').addEventListener('click',()=>{if(safeExitForm())openPractice();});
+$('navList').addEventListener('click',()=>{if(!safeExitForm())return;render();show('listView');});
+$('nextQuestion').addEventListener('click',nextPractice);
+$('revealAnswer').addEventListener('click',()=>{const panel=$('practiceAnswer');panel.classList.toggle('hidden');$('revealAnswer').textContent=panel.classList.contains('hidden')?'핵심 답변 보기':'핵심 답변 숨기기';});
+$('addQaBtn').addEventListener('click',()=>{syncQaEditor();qaDraft.push({question:'',answer:''});renderQaEditor();changed=true;});
+function safeExitForm(){if($('formView').classList.contains('hidden'))return true;return !(changed&&!confirm('작성 중인 변경 내용을 취소하고 목록으로 돌아갈까요?'));}
+function openForm(id=null){
+  form.reset();$('formError').textContent='';editingId=id;changed=false;
+  const x=experiences.find(x=>x.id===id);
+  if(x)for(const k of formKeys)form.elements.namedItem(k).value=x[k]||'';
+  qaDraft=x?getQaPairs(x):[];renderQaEditor();
+  $('ongoing').checked=!!(x&&isOngoing(x));updateEndControl();
+  $('formTitle').textContent=x?'경험 수정':'새 경험 추가';
+  $('saveBtn').textContent=x?'수정 완료':'추가하기';
+  show('formView');$('name').focus();
+}
+function cancelForm(){
+  if(!safeExitForm())return;
+  changed=false;show('listView');
+}
+document.querySelectorAll('[data-filter]').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.filter;render()}));
+$('searchInput').addEventListener('input',e=>{searchTerm=e.target.value.trim().toLocaleLowerCase();render()});
+$('clearSearch').addEventListener('click',()=>{$('searchInput').value='';searchTerm='';render();$('searchInput').focus()});
+$('ongoing').addEventListener('change',updateEndControl);
+// v3: 브라우저 간 데이터 이동을 위한 JSON 백업/복원 (자동 동기화 아님)
+function backupMessage(message, error=false){
+  const p=$('backupStatus');p.textContent=message;p.classList.toggle('error',error);p.hidden=false;
+}
+function exportBackup(){
+  const payload={app:'My Career Archive',formatVersion:1,exportedAt:new Date().toISOString(),experiences};
+  try{
+    const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json;charset=utf-8'});
+    const url=URL.createObjectURL(blob);
+    const link=document.createElement('a');
+    link.href=url;link.download='career-archive-backup-'+new Date().toISOString().slice(0,10)+'.json';
+    document.body.appendChild(link);link.click();link.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),60000);
+    backupMessage(`현재 ${experiences.length}개 경험의 JSON 백업 파일 다운로드를 요청했습니다. 다운로드 목록을 확인해 주세요.`);
+  }catch(err){backupMessage('백업 파일을 만들지 못했습니다. 브라우저 설정을 확인해 주세요.',true);}
+}
+function validDateString(s){
+  if(typeof s!=='string'||!/^(\d{4})-(\d{2})-(\d{2})$/.test(s))return false;
+  const d=new Date(s+'T00:00:00Z');return !Number.isNaN(d.getTime())&&d.toISOString().slice(0,10)===s;
+}
+function checkImport(data){
+  if(!data||typeof data!=='object'||Array.isArray(data)||data.app!=='My Career Archive'||data.formatVersion!==1||!Array.isArray(data.experiences))throw new Error('이 페이지에서 만든 백업 파일 형식이 아닙니다.');
+  if(data.experiences.length>2000)throw new Error('백업에 경험이 너무 많습니다.');
+  const allowed=['프로젝트','대외활동','교육'];const ids=new Set();
+  const cleaned=data.experiences.map((row,index)=>{
+    if(!row||typeof row!=='object'||Array.isArray(row)||!Number.isSafeInteger(row.id)||row.id<1||ids.has(row.id))throw new Error(`${index+1}번째 경험의 ID가 올바르지 않습니다.`);
+    ids.add(row.id);
+    const entry={id:row.id};
+    for(const key of keys){
+      const value=row[key];
+      if(typeof value!=='string'||value.length>100000)throw new Error(`${index+1}번째 경험의 '${key}' 값이 올바르지 않습니다.`);
+      entry[key]=value;
+    }
+    if(!allowed.includes(entry.type)||!entry.name.trim()||!entry.role.trim()||!entry.activities.trim()||!entry.outcome.trim()||!validDateString(entry.start))throw new Error(`${index+1}번째 경험의 필수 정보가 올바르지 않습니다.`);
+    entry.ongoing=row.ongoing===true;
+    if(!entry.ongoing&&(!validDateString(entry.end)||entry.end<entry.start))throw new Error(`${index+1}번째 경험의 종료일이 올바르지 않습니다.`);
+    if(entry.ongoing)entry.end='';
+    if(row.qaPairs!==undefined){
+      if(!Array.isArray(row.qaPairs)||row.qaPairs.length>200)throw new Error(`${index+1}번째 경험의 면접 질문 목록 형식이 올바르지 않습니다.`);
+      entry.qaPairs=row.qaPairs.map((p,j)=>{
+        if(!p||typeof p.question!=='string'||typeof p.answer!=='string'||p.question.length>10000||p.answer.length>100000)throw new Error(`${index+1}번째 경험의 ${j+1}번 질문 데이터가 올바르지 않습니다.`);
+        return {question:p.question,answer:p.answer};
+      });
+    }
+    return entry;
+  });
+  return cleaned;
+}
+async function importBackup(file){
+  if(!file)return;
+  if(file.size>15*1024*1024){backupMessage('15MB 이하의 JSON 파일만 가져올 수 있습니다.',true);return;}
+  let incoming;
+  try{incoming=checkImport(JSON.parse(await file.text()));}
+  catch(err){backupMessage('가져오기 실패: '+(err.message||'파일을 읽을 수 없습니다.'),true);return;}
+  const oldCount=experiences.length;
+  const message=`백업 파일에 경험 ${incoming.length}개가 있습니다.\n현재 브라우저에 저장된 ${oldCount}개 기록은 모두 교체됩니다.\n\n복원할까요? (취소하면 기존 기록이 유지됩니다.)`;
+  if(!confirm(message)){
+    backupMessage('복원을 취소했습니다. 기존 기록은 그대로 유지됩니다.');return;
+  }
+  // 브라우저 저장에 성공한 경우에만 화면과 메모리의 경험 목록을 교체한다.
+  try{localStorage.setItem(STORE_KEY,JSON.stringify(incoming));}
+  catch(err){backupMessage('저장 공간 부족 또는 저장소 차단으로 복원하지 못했습니다. 기존 데이터는 그대로 유지됩니다.',true);return;}
+  experiences=incoming;
+  nextId=Math.max(0,...experiences.map(x=>x.id))+1;
+  filter='전체';searchTerm='';$('searchInput').value='';detailId=null;
+  render();show('listView');
+  backupMessage(`복원 완료: 경험 ${incoming.length}개를 이 브라우저에 저장했습니다.`);
+}
+$('exportBtn').addEventListener('click',exportBackup);
+$('importBtn').addEventListener('click',()=>$('importFile').click());
+$('importFile').addEventListener('change',async e=>{
+  const file=e.target.files&&e.target.files[0];
+  try{await importBackup(file)}finally{e.target.value='';}
+});
+$('addBtn').addEventListener('click',()=>openForm());
+$('backDetail').addEventListener('click',()=>show('listView'));
+$('backForm').addEventListener('click',cancelForm);
+$('cancelForm').addEventListener('click',cancelForm);
+$('editBtn').addEventListener('click',()=>{if(detailId!==null)openForm(detailId)});
+$('deleteBtn').addEventListener('click',()=>{
+  const x=experiences.find(e=>e.id===detailId);if(!x)return;
+  if(!confirm(`'${x.name}' 경험을 삭제하시겠습니까? 삭제한 내용은 되돌릴 수 없습니다.`))return;
+  const old=[...experiences];experiences=experiences.filter(e=>e.id!==detailId);
+  if(!save()){experiences=old;return}
+  detailId=null;render();show('listView');
+});
+form.addEventListener('input',()=>changed=true);
+form.addEventListener('change',()=>changed=true);
+form.addEventListener('submit',e=>{
+  e.preventDefault();const data={};for(const key of formKeys)data[key]=form.elements.namedItem(key).value.trim();data.ongoing=$('ongoing').checked;
+  syncQaEditor();
+  data.qaPairs=qaDraft.map(p=>({question:p.question.trim(),answer:p.answer.trim()})).filter(p=>p.question||p.answer);
+  if(data.qaPairs.some(p=>!p.question)){ $('formError').textContent='면접 질문을 비워 둔 세트가 있어요. 질문을 입력하거나 해당 세트를 삭제해 주세요.';return; }
+  data.question=data.qaPairs[0]?.question||'';data.answer=data.qaPairs[0]?.answer||'';
+  const required=keys.filter(k=>!optionalKeys.includes(k) && !(data.ongoing && k==='end'));
+  const missing=required.find(k=>!data[k]);
+  if(missing){const field=form.elements.namedItem(missing);$('formError').textContent=`필수 항목을 입력해 주세요: ${field.labels?.[0]?.textContent.trim()||missing}`;field.focus();return}
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(data.start)||!Number.isFinite(Date.parse(data.start))||(!data.ongoing&&(!/^\d{4}-\d{2}-\d{2}$/.test(data.end)||!Number.isFinite(Date.parse(data.end))))){$('formError').textContent='시작일과 종료일을 올바르게 입력해 주세요.';return}
+  if(!data.ongoing&&data.end<data.start){$('formError').textContent='종료일은 시작일보다 빠를 수 없습니다.';$('end').focus();return}
+  const old=[...experiences];
+  if(editingId!==null){experiences=experiences.map(x=>x.id===editingId?{...data,id:editingId}:x)}
+  else{experiences.push({...data,id:nextId++})}
+  if(!save()){experiences=old;return}
+  filter='전체';changed=false;render();show('listView');
+});
+window.addEventListener('beforeunload',e=>{if(changed){e.preventDefault();e.returnValue=''}});
+load();render();
+</script></body></html>
